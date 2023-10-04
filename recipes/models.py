@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User 
+
 
 # O models, transforma classes em tabelas SQL
 
@@ -10,17 +12,28 @@ from django.db import models
 
 # O auto_now atualiza a data toda vez que uma atualização do sistema
 
+# O on_delete=models.SET_NULL é usado para indicar que quando a receita for excluida o category ficarà nulo e o null=True indica que o campo pode ficar nulo
+
+class Category(models.Model):
+    name = models.CharField(max_length=65)
+
 class Recipe(models.Model):
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=200)
     preparation_time = models.IntegerField()
     preparation_time_unit = models.CharField(max_length=65)
     servings = models.IntegerField()
-    servings_unit = models.CharField()
+    servings_unit = models.CharField(max_length=65)
     preparation_steps = models.TextField()
     preparation_steps_is_html = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     update_at = models.DateField(auto_now=True)
-    is_publishied = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False) 
     cover = models.ImageField(upload_to='recipes/covers/%Y/%m/%d/')
+    category = models.ForeignKey(
+         Category, on_delete=models.SET_NULL, null=True
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True
+    )
