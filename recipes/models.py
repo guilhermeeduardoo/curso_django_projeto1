@@ -12,10 +12,15 @@ from django.contrib.auth.models import User
 
 # O auto_now atualiza a data toda vez que uma atualização do sistema
 
+# O def __str__(self):  return self.name serve para modificar o nome de category obejct para o nome colocado em admin
+
 # O on_delete=models.SET_NULL é usado para indicar que quando a receita for excluida o category ficarà nulo e o null=True indica que o campo pode ficar nulo
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
+
+    def __str__(self):
+        return self.name
 
 class Recipe(models.Model):
     title = models.CharField(max_length=65)
