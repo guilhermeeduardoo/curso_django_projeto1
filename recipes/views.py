@@ -20,8 +20,11 @@ def category(request, category_id):
 })
 
 def recipe(request,id):
+
+    recipe = Recipe.objects.filter(pk=id, is_published=True).order_by('-id').first()
+
     return render(request,'recipes/pages/recipe-view.html',context={
-        'recipe': make_recipe(),
+        'recipe': recipe,
         'is_detail_page': True, 
 })
 
@@ -39,3 +42,5 @@ def recipe(request,id):
 # O - Category |, é só pra complemantar o nome da página, junta uma variavel com uma string
 # Esse código, if not recipes: raise Http404('Not found :('), foi feito para retornar um 404 e a mensagem "Not found", quando não achar um id de categoria
 # Com o get_list_or_404 em vez do first que retorna uma queryset, usa o [0], já que vai percorrer uma lista, a vantagem é que não precisa usar o if. Passa o model nesse caso o Recipe e os filtros
+# O first na view de recipe, é para retornar o primeiro id encontrado ou seja o unico que irá aparecer
+# O pk é primari key, ou seja a chave primaria de recipe igual ao id
