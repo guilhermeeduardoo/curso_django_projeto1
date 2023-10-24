@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_list_or_404
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 from utils.recipes.factory import make_recipe
 from .models import Recipe
 
@@ -21,7 +21,7 @@ def category(request, category_id):
 
 def recipe(request,id):
 
-    recipe = Recipe.objects.filter(pk=id, is_published=True).order_by('-id').first()
+    recipe = get_object_or_404(Recipe, pk=id, is_published=True)
 
     return render(request,'recipes/pages/recipe-view.html',context={
         'recipe': recipe,
@@ -44,3 +44,4 @@ def recipe(request,id):
 # Com o get_list_or_404 em vez do first que retorna uma queryset, usa o [0], já que vai percorrer uma lista, a vantagem é que não precisa usar o if. Passa o model nesse caso o Recipe e os filtros
 # O first na view de recipe, é para retornar o primeiro id encontrado ou seja o unico que irá aparecer
 # O pk é primari key, ou seja a chave primaria de recipe igual ao id
+# O recipe = get_object_or_404(Recipe, pk=id, is_published=True) faz a mesma coisa que o recipe = Recipe.objects.filter(pk=id, is_published=True).order_by('-id').first(), só que mais enxuto epega logo o object 
